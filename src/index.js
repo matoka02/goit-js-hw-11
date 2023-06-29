@@ -1,7 +1,9 @@
 import { SimpleLightbox } from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from "simplelightbox/dist/simple-lightbox.esm";
 
 import { fetchImages } from "./js/fetchImages";
+
 
 const input = document.querySelector('.search-form-input');
 const buttonSearch = document.querySelector('.search-form-button');
@@ -10,12 +12,14 @@ const buttonLoadMore = document.querySelector('.load-more');
 
 let gallerySimpleLightbox = new SimpleLightbox('.gallery a');
 
+
+
 buttonLoadMore.style.display = 'none';
 
 let pageNumber = 1;
 
 buttonSearch.addEventListener('click', onSearch(evt));
-buttonLoadMore.addEventListener('click', onLoad(evt));
+
 
 function onSearch(evt) {
     evt.preventDefault();
@@ -38,6 +42,8 @@ function onSearch(evt) {
         });
     };
 };
+
+buttonLoadMore.addEventListener('click', onLoad(evt));
 
 function onLoad(evt) {
     pageNumber += 1;
