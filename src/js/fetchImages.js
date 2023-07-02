@@ -1,17 +1,22 @@
-export const fetchImages = async (inputValue, pageNr) => {
-  return await fetch(
-    `https://pixabay.com/api/?key=29588079-fbc492831fdad231bf7222b96&q=${inputValue}&orientation=horizontal&safesearch=true&image_type=photo&per_page=40&page=${pageNr}`
-  )
-    .then(async response => {
-      if (!response.ok) {
-        if (response.status === 404) {
-          return [];
-        }
-        throw new Error(response.status);
-      }
-      return await response.json();
-    })
-    .catch(error => {
-      console.error(error);
-    });
+const BASE_URL = 'https://pixabay.com/api/';
+const API_KEY = '37972717-70d116d5c7dba3fcb6f3ce7e2';
+
+async function fetchImages(inputValue, pageNr) {
+    return await fetch(
+        `${BASE_URL}?key=${API_KEY}&q=${inputValue}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${pageNr}`
+    )
+        .then(async resp => {
+            if (!resp.ok) {
+                if (resp.status === 404) {
+                    return [];
+                }
+                throw new Error(resp.status);
+            }
+            return await resp.json();
+        })
+        .catch(error => {
+            console.error(error);
+        });
 };
+
+export {fetchImages}
