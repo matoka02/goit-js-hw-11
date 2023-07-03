@@ -25,7 +25,7 @@ buttonLoadMore.style.display = 'none';
 
 let pageNumber = 1;
 
-buttonSearch.addEventListener('click', (evt) => {
+buttonSearch.addEventListener('click', async (evt) => {
     evt.preventDefault();
     cleanGallery();
 
@@ -33,13 +33,10 @@ buttonSearch.addEventListener('click', (evt) => {
     console.log(typeof inputValue);         // string
 
     if (inputValue !== '') {
-        fetchImages(inputValue, pageNumber).then(foundData => {
+        await fetchImages(inputValue, pageNumber).then(foundData => {
             if (foundData.hits.length === 0) {
                 Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
-            } else if (foundData.hits.length <= foundData.totalHits) {
-                createMarkup(foundData.hits);
-                Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
-            } else {
+            }  else {
                 // console.log(typeof foundData);       // object
                 createMarkup(foundData.hits);
                 Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
@@ -51,13 +48,13 @@ buttonSearch.addEventListener('click', (evt) => {
 });
 
 
-buttonLoadMore.addEventListener('click', (evt) => {
+buttonLoadMore.addEventListener('click', async (evt) => {
     pageNumber+=1;
     buttonLoadMore.style.display = 'none';
 
     const inputValue = input.value.trim();
 
-    fetchImages(inputValue, pageNumber).then(foundData => {
+    await fetchImages(inputValue, pageNumber).then(foundData => {
         if (foundData.hits.length === 0) {
             Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
         } else if (foundData.hits.length < foundData.totalHits) {
