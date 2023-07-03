@@ -36,6 +36,9 @@ buttonSearch.addEventListener('click', (evt) => {
         fetchImages(inputValue, pageNumber).then(foundData => {
             if (foundData.hits.length === 0) {
                 Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
+            } else if (foundData.hits.length <= foundData.totalHits) {
+                createMarkup(foundData.hits);
+                Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
             } else {
                 // console.log(typeof foundData);       // object
                 createMarkup(foundData.hits);
@@ -57,7 +60,12 @@ buttonLoadMore.addEventListener('click', (evt) => {
     fetchImages(inputValue, pageNumber).then(foundData => {
         if (foundData.hits.length === 0) {
             Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
+        } else if (foundData.hits.length < foundData.totalHits) {
+            createMarkup(foundData.hits);
+            Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`);
+            buttonLoadMore.style.display = 'none';
         } else {
+            console.log(foundData.hits);
             createMarkup(foundData.hits);
             Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
             buttonLoadMore.style.display = 'block';
@@ -68,7 +76,7 @@ buttonLoadMore.addEventListener('click', (evt) => {
 function createMarkup(images) {
     console.log(images);
     const markup = images.map(image => {
-            console.log(image);
+            // console.log(image);
             return `<div class="photo-card">
                 <a href="${image.largeImageURL}"><img class="photo" src="${image.webformatURL}" alt="${image.tags}" title="${image.tags}" loading="lazy"/></a>
                 <div class="info">
