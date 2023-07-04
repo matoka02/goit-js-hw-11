@@ -30,23 +30,24 @@ buttonSearch.addEventListener('click', async (evt) => {
     cleanGallery();
 
     const inputValue = input.value.trim();
-    console.log(typeof inputValue);         // string
+    console.log(inputValue);         // string
 
     if (inputValue !== '') {
-        await fetchImages(inputValue, pageNumber).then(foundData => {
-            if (foundData.hits.length === 0) {
-                Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
-            }  else {
-                // console.log(typeof foundData);       // object
-                createMarkup(foundData.hits);
-                Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
-                buttonLoadMore.style.display = 'block';
-                gallerySimpleLightbox.refresh();
-            }
-        });
+        const foundData = await fetchImages(inputValue, pageNumber);
+        // console.log(foundData);
+
+        if (foundData.hits.length === 0) {
+            Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
+            return;
+        }
+
+        createMarkup(foundData.hits);
+        Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
+        buttonLoadMore.style.display = 'block';
+        gallerySimpleLightbox.refresh();
+        
     }
 });
-
 
 buttonLoadMore.addEventListener('click', async (evt) => {
     pageNumber+=1;
@@ -54,7 +55,8 @@ buttonLoadMore.addEventListener('click', async (evt) => {
 
     const inputValue = input.value.trim();
 
-    await fetchImages(inputValue, pageNumber).then(foundData => {
+    const foundData = await fetchImages(inputValue, pageNumber);
+
         if (foundData.hits.length === 0) {
             Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
         } else if (foundData.hits.length < foundData.totalHits) {
@@ -67,7 +69,6 @@ buttonLoadMore.addEventListener('click', async (evt) => {
             Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
             buttonLoadMore.style.display = 'block';
         }
-    });
 });
 
 function createMarkup(images) {
