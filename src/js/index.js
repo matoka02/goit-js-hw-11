@@ -1,4 +1,4 @@
-import { fetchImages } from '../js/fetchImages';
+import { fetchImages, PER_PAGE} from '../js/fetchImages';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -59,7 +59,7 @@ buttonLoadMore.addEventListener('click', async (evt) => {
 
         if (foundData.hits.length === 0) {
             Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`);
-        } else if (foundData.hits.length < foundData.totalHits) {
+        } else if (foundData.hits.length < PER_PAGE) {
             createMarkup(foundData.hits);
             Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`);
             buttonLoadMore.style.display = 'none';
